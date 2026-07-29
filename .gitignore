@@ -1,0 +1,14 @@
+# Laravel
+/api/vendor
+/api/node_modules
+/api/.env
+/api/storage/*.key
+/api/public/storage
+
+# Next.js
+/web/node_modules
+/web/.next
+/web/.env.local
+
+# System
+.DS_Store
