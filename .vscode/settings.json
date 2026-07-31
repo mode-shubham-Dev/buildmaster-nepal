@@ -1,0 +1,22 @@
+{
+    "intelephense.environment.phpVersion": "8.3.0",
+    "intelephense.files.maxSize": 5000000,
+    "intelephense.completion.insertUseDeclaration": true,
+    "intelephense.completion.fullyQualifyGlobalConstantsAndFunctions": false,
+    "intelephense.format.enable": true,
+    "intelephense.diagnostics.enable": true,
+    "intelephense.phpdoc.useFullyQualifiedNames": false,
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+        "editor.formatOnSave": true,
+        "editor.suggest.insertMode": "replace"
+    },
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+    "editor.suggest.showClasses": true,
+    "editor.acceptSuggestionOnEnter": "on",
+    "php.suggest.basic": false
+}
