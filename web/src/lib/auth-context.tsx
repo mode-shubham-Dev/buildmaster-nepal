@@ -8,6 +8,8 @@ interface User {
   id: number;
   name: string;
   email: string;
+  roles: string[];
+  permissions: string[];
   created_at: string;
 }
 
@@ -16,6 +18,8 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  can: (permission: string) => boolean;
+  hasRole: (role: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,8 +72,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push("/login");
   };
 
+  const can = (permission: string): boolean => {
+    return user?.permissions?.includes(permission) ?? false;
+  };
+
+  const hasRole = (role: string): boolean => {
+    return user?.roles?.includes(role) ?? false;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, can, hasRole }}>
       {children}
     </AuthContext.Provider>
   );
