@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\CertificationController;
+use App\Http\Controllers\Api\EmergencyContactController;
+use App\Http\Controllers\Api\EmployeeSkillController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\OfficeLocationController;
+use App\Http\Controllers\Api\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -63,6 +67,35 @@ Route::prefix('v1')->group(function () {
         Route::post('/office-locations', [OfficeLocationController::class, 'store'])->middleware('permission:company.manage');
         Route::put('/office-locations/{officeLocation}', [OfficeLocationController::class, 'update'])->middleware('permission:company.manage');
         Route::delete('/office-locations/{officeLocation}', [OfficeLocationController::class, 'destroy'])->middleware('permission:company.manage');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 5 — Employee Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('employees', EmployeeController::class) ->middleware([
+                'index'   => 'permission:employees.view',
+                'show'    => 'permission:employees.view',
+                'store'   => 'permission:employees.create',
+                'update'  => 'permission:employees.update',
+                'destroy' => 'permission:employees.delete',
+        ]);
+
+        // Employee sub-resources (skills, certifications, emergency contacts)
+        Route::post('/employees/{employee}/skills', [EmployeeSkillController::class, 'store'])
+            ->middleware('permission:employees.update');
+        Route::delete('/skills/{skill}', [EmployeeSkillController::class, 'destroy'])
+            ->middleware('permission:employees.update');
+
+        Route::post('/employees/{employee}/certifications', [CertificationController::class, 'store'])
+            ->middleware('permission:employees.update');
+        Route::delete('/certifications/{certification}', [CertificationController::class, 'destroy'])
+            ->middleware('permission:employees.update');
+
+        Route::post('/employees/{employee}/emergency-contacts', [EmergencyContactController::class, 'store'])
+            ->middleware('permission:employees.update');
+        Route::delete('/emergency-contacts/{emergencyContact}', [EmergencyContactController::class, 'destroy'])
+            ->middleware('permission:employees.update');
     });
 
 });
