@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ClientContactController;
 use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\CommunicationController;
+use App\Http\Controllers\Api\TenderController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -131,6 +132,20 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:clients.update');
         Route::delete('/communications/{communication}', [CommunicationController::class, 'destroy'])
             ->middleware('permission:clients.update');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 7 — Tender & Bid Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('tenders', TenderController::class)
+            ->middleware([
+                'index'   => 'permission:tenders.view',
+                'show'    => 'permission:tenders.view',
+                'store'   => 'permission:tenders.create',
+                'update'  => 'permission:tenders.update',
+                'destroy' => 'permission:tenders.delete',
+            ]);
     });
 
 });
