@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\ClientContactController;
 use App\Http\Controllers\Api\ContractController;
 use App\Http\Controllers\Api\CommunicationController;
 use App\Http\Controllers\Api\TenderController;
+use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ProjectMemberController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -146,6 +148,30 @@ Route::prefix('v1')->group(function () {
                 'update'  => 'permission:tenders.update',
                 'destroy' => 'permission:tenders.delete',
             ]);
+
+        /*
+        |------------------------------------------------------------------
+        | Module 8 — Project Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('projects', ProjectController::class)
+            ->middleware([
+                'index'   => 'permission:projects.view',
+                'show'    => 'permission:projects.view',
+                'store'   => 'permission:projects.create',
+                'update'  => 'permission:projects.update',
+                'destroy' => 'permission:projects.delete',
+            ]);
+
+        // Team assignment
+        Route::post('/projects/{project}/members', [ProjectMemberController::class, 'store'])
+            ->middleware('permission:projects.update');
+        Route::delete('/projects/{project}/members/{employee}', [ProjectMemberController::class, 'destroy'])
+            ->middleware('permission:projects.update');
+
+        // Convert a won tender into a project
+        Route::post('/tenders/{tender}/convert-to-project', [ProjectController::class, 'convertFromTender'])
+            ->middleware('permission:projects.create');
     });
 
 });
