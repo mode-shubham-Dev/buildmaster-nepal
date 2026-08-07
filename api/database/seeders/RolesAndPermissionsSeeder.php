@@ -35,6 +35,9 @@ class RolesAndPermissionsSeeder extends Seeder
             // Clients
             'clients.view', 'clients.create', 'clients.update', 'clients.delete',
 
+            // Tenders (Module 7)
+            'tenders.view', 'tenders.create', 'tenders.update', 'tenders.delete',
+
             // Projects
             'projects.view', 'projects.create', 'projects.update', 'projects.delete',
 
@@ -80,6 +83,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $ceo->syncPermissions([
             'users.view', 'company.view', 'company.manage',
             'employees.view', 'clients.view',
+            'tenders.view', 'tenders.create', 'tenders.update', 'tenders.delete',
             'projects.view', 'reports.view',
             'materials.view', 'warehouse.view',
             'purchases.view', 'purchases.approve',
@@ -92,6 +96,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $pm = Role::firstOrCreate(['name' => 'Project Manager', 'guard_name' => 'web']);
         $pm->syncPermissions([
             'employees.view', 'clients.view',
+            'tenders.view', 'tenders.create', 'tenders.update', 'tenders.delete',
             'projects.view', 'projects.create', 'projects.update',
             'reports.view', 'reports.create',
             'materials.view', 'warehouse.view',
