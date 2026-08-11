@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectMemberController;
 use App\Http\Controllers\Api\BoqItemController;
 use App\Http\Controllers\Api\MilestoneController;
+use App\Http\Controllers\Api\SiteReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -208,6 +209,24 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:projects.update');
         Route::delete('/attachments/{attachment}', [MilestoneController::class, 'deleteImage'])
             ->middleware('permission:projects.update');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 11 — Daily Site Reports
+        |------------------------------------------------------------------
+        */
+        Route::get('/projects/{project}/site-reports', [SiteReportController::class, 'index'])
+            ->middleware('permission:reports.view');
+        Route::post('/projects/{project}/site-reports', [SiteReportController::class, 'store'])
+            ->middleware('permission:reports.create');
+        Route::put('/site-reports/{siteReport}', [SiteReportController::class, 'update'])
+            ->middleware('permission:reports.create');
+        Route::delete('/site-reports/{siteReport}', [SiteReportController::class, 'destroy'])
+            ->middleware('permission:reports.create');
+
+        // Photo upload (reuses FileService; deletion uses the existing /attachments route)
+        Route::post('/site-reports/{siteReport}/photos', [SiteReportController::class, 'uploadPhoto'])
+            ->middleware('permission:reports.create');
     });
 
 });

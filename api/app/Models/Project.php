@@ -77,6 +77,12 @@ class Project extends Model
         return $this->hasMany(Milestone::class)->orderBy('sort_order');
     }
 
+
+    public function siteReports(): HasMany
+    {
+        return $this->hasMany(SiteReport::class)->latest('report_date');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
