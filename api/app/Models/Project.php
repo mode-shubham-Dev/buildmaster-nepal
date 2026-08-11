@@ -72,6 +72,11 @@ class Project extends Model
         return $this->hasMany(BoqItem::class)->orderBy('sort_order');
     }
 
+    public function milestones(): HasMany
+    {
+        return $this->hasMany(Milestone::class)->orderBy('sort_order');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\TenderController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectMemberController;
 use App\Http\Controllers\Api\BoqItemController;
+use App\Http\Controllers\Api\MilestoneController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -187,6 +188,26 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:boq.update');
         Route::delete('/boq/{boqItem}', [BoqItemController::class, 'destroy'])
             ->middleware('permission:boq.delete');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 10 — Milestone Management
+        |------------------------------------------------------------------
+        */
+        Route::get('/projects/{project}/milestones', [MilestoneController::class, 'index'])
+            ->middleware('permission:projects.view');
+        Route::post('/projects/{project}/milestones', [MilestoneController::class, 'store'])
+            ->middleware('permission:projects.update');
+        Route::put('/milestones/{milestone}', [MilestoneController::class, 'update'])
+            ->middleware('permission:projects.update');
+        Route::delete('/milestones/{milestone}', [MilestoneController::class, 'destroy'])
+            ->middleware('permission:projects.update');
+
+        // Image upload/delete (uses the reusable FileService)
+        Route::post('/milestones/{milestone}/images', [MilestoneController::class, 'uploadImage'])
+            ->middleware('permission:projects.update');
+        Route::delete('/attachments/{attachment}', [MilestoneController::class, 'deleteImage'])
+            ->middleware('permission:projects.update');
     });
 
 });
