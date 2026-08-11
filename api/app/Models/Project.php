@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use App\Models\Tender;
@@ -64,6 +65,11 @@ class Project extends Model
         return $this->belongsToMany(Employee::class, 'project_members')
             ->withPivot('role_on_project')   // include the pivot's extra column
             ->withTimestamps();               // pivot has created_at/updated_at
+    }
+
+    public function boqItems(): HasMany
+    {
+        return $this->hasMany(BoqItem::class)->orderBy('sort_order');
     }
 
     public function getActivitylogOptions(): LogOptions

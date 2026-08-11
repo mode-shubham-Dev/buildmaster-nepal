@@ -18,6 +18,7 @@ import {
   Plus,
   Trash2,
   HardHat,
+  Calculator,
 } from "lucide-react";
 import {
   fetchProject,
@@ -27,8 +28,9 @@ import {
   type ProjectStatus,
 } from "@/lib/projects-api";
 import { fetchEmployees } from "@/lib/employees-api";
+import { BoqTab } from "@/components/project/boq-tab";
 
-type Tab = "overview" | "team";
+type Tab = "overview" | "team" | "boq";
 
 const STATUS_META: Record<ProjectStatus, { label: string; color: string }> = {
   planning: { label: "Planning", color: "bg-slate-100 text-slate-600" },
@@ -114,6 +116,7 @@ function ProfileContent() {
           {[
             { id: "overview" as Tab, label: "Overview", icon: <LayoutDashboard className="h-4 w-4" /> },
             { id: "team" as Tab, label: "Team", icon: <Users className="h-4 w-4" /> },
+            { id: "boq" as Tab, label: "BOQ", icon: <Calculator className="h-4 w-4" /> },
           ].map((t) => (
             <button
               key={t.id}
@@ -134,6 +137,7 @@ function ProfileContent() {
         {tab === "team" && (
           <TeamTab projectId={id} members={project.members ?? []} canManage={canManage} />
         )}
+        {tab === "boq" && <BoqTab projectId={id} canManage={can("boq.create")} />}
       </div>
     </div>
   );
@@ -151,7 +155,6 @@ function OverviewTab({ project }: { project: Project }) {
 
   return (
     <div className="space-y-5">
-      {/* money summary */}
       <div className="grid gap-4 sm:grid-cols-3">
         <MoneyCard label="Contract Value" value={money(project.contract_value)} highlight />
         <MoneyCard label="Budget" value={money(project.budget)} />
@@ -165,7 +168,6 @@ function OverviewTab({ project }: { project: Project }) {
         />
       </div>
 
-      {/* info */}
       <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <dl className="grid gap-5 sm:grid-cols-2">
           {info.map((r) => (
@@ -182,7 +184,6 @@ function OverviewTab({ project }: { project: Project }) {
         </dl>
       </div>
 
-      {/* description */}
       {project.description && (
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">
@@ -255,7 +256,6 @@ function TeamTab({
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project", projectId] }),
   });
 
-  // exclude already-assigned employees from the dropdown
   const assignedIds = new Set((members ?? []).map((m) => m.id));
   const available = (employees ?? []).filter((e) => !assignedIds.has(e.id));
 
