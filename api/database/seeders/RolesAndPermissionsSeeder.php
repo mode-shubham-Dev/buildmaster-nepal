@@ -59,6 +59,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'payroll.view', 'payroll.process',
             'expenses.view', 'expenses.create',
 
+            // BOQ & Estimation (Module 9)
+            'boq.view', 'boq.create', 'boq.update', 'boq.delete',
+
             // Dashboards & analytics
             'dashboard.view',
             'analytics.view',
@@ -85,6 +88,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'employees.view', 'clients.view',
             'tenders.view', 'tenders.create', 'tenders.update', 'tenders.delete',
             'projects.view', 'reports.view',
+            'boq.view', 'boq.create', 'boq.update', 'boq.delete',
             'materials.view', 'warehouse.view',
             'purchases.view', 'purchases.approve',
             'attendance.view', 'leave.view', 'leave.approve',
@@ -98,6 +102,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'employees.view', 'clients.view',
             'tenders.view', 'tenders.create', 'tenders.update', 'tenders.delete',
             'projects.view', 'projects.create', 'projects.update',
+            'boq.view', 'boq.create', 'boq.update', 'boq.delete',
             'reports.view', 'reports.create',
             'materials.view', 'warehouse.view',
             'purchases.view', 'purchases.create', 'purchases.approve',
@@ -132,6 +137,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $accountant = Role::firstOrCreate(['name' => 'Accountant', 'guard_name' => 'web']);
         $accountant->syncPermissions([
             'clients.view',
+            'boq.view',
             'purchases.view',
             'payroll.view', 'payroll.process',
             'expenses.view', 'expenses.create',

@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\CommunicationController;
 use App\Http\Controllers\Api\TenderController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectMemberController;
+use App\Http\Controllers\Api\BoqItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -172,6 +173,20 @@ Route::prefix('v1')->group(function () {
         // Convert a won tender into a project
         Route::post('/tenders/{tender}/convert-to-project', [ProjectController::class, 'convertFromTender'])
             ->middleware('permission:projects.create');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 9 — BOQ & Estimation
+        |------------------------------------------------------------------
+        */
+        Route::get('/projects/{project}/boq', [BoqItemController::class, 'index'])
+            ->middleware('permission:boq.view');
+        Route::post('/projects/{project}/boq', [BoqItemController::class, 'store'])
+            ->middleware('permission:boq.create');
+        Route::put('/boq/{boqItem}', [BoqItemController::class, 'update'])
+            ->middleware('permission:boq.update');
+        Route::delete('/boq/{boqItem}', [BoqItemController::class, 'destroy'])
+            ->middleware('permission:boq.delete');
     });
 
 });
