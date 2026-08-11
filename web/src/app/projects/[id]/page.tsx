@@ -19,6 +19,7 @@ import {
   Trash2,
   HardHat,
   Calculator,
+  Flag,
 } from "lucide-react";
 import {
   fetchProject,
@@ -29,8 +30,9 @@ import {
 } from "@/lib/projects-api";
 import { fetchEmployees } from "@/lib/employees-api";
 import { BoqTab } from "@/components/project/boq-tab";
+import { MilestonesTab } from "@/components/project/milestones-tab";
 
-type Tab = "overview" | "team" | "boq";
+type Tab = "overview" | "team" | "boq" | "milestones";
 
 const STATUS_META: Record<ProjectStatus, { label: string; color: string }> = {
   planning: { label: "Planning", color: "bg-slate-100 text-slate-600" },
@@ -117,6 +119,7 @@ function ProfileContent() {
             { id: "overview" as Tab, label: "Overview", icon: <LayoutDashboard className="h-4 w-4" /> },
             { id: "team" as Tab, label: "Team", icon: <Users className="h-4 w-4" /> },
             { id: "boq" as Tab, label: "BOQ", icon: <Calculator className="h-4 w-4" /> },
+            { id: "milestones" as Tab, label: "Milestones", icon: <Flag className="h-4 w-4" /> },
           ].map((t) => (
             <button
               key={t.id}
@@ -138,6 +141,7 @@ function ProfileContent() {
           <TeamTab projectId={id} members={project.members ?? []} canManage={canManage} />
         )}
         {tab === "boq" && <BoqTab projectId={id} canManage={can("boq.create")} />}
+        {tab === "milestones" && <MilestonesTab projectId={id} canManage={can("projects.update")} />}
       </div>
     </div>
   );
