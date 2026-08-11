@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
@@ -64,6 +65,13 @@ class Employee extends Model
     public function certifications(): HasMany
     {
         return $this->hasMany(Certification::class);
+    }
+
+    public function proects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class, 'project_members')
+            ->withPivot('role_on_project')
+            ->withTimestamps();
     }
 
     // Convenience accessor: full name from first + last
