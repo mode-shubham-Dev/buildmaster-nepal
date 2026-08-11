@@ -21,6 +21,8 @@ use App\Http\Controllers\Api\ProjectMemberController;
 use App\Http\Controllers\Api\BoqItemController;
 use App\Http\Controllers\Api\MilestoneController;
 use App\Http\Controllers\Api\SiteReportController;
+use App\Http\Controllers\Api\MaterialController;
+use App\Http\Controllers\Api\MaterialCategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -227,6 +229,28 @@ Route::prefix('v1')->group(function () {
         // Photo upload (reuses FileService; deletion uses the existing /attachments route)
         Route::post('/site-reports/{siteReport}/photos', [SiteReportController::class, 'uploadPhoto'])
             ->middleware('permission:reports.create');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 12 — Material Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('materials', MaterialController::class)
+            ->middleware([
+                'index'   => 'permission:materials.view',
+                'show'    => 'permission:materials.view',
+                'store'   => 'permission:materials.manage',
+                'update'  => 'permission:materials.manage',
+                'destroy' => 'permission:materials.manage',
+            ]);
+
+        // Material categories
+        Route::get('/material-categories', [MaterialCategoryController::class, 'index'])
+            ->middleware('permission:materials.view');
+        Route::post('/material-categories', [MaterialCategoryController::class, 'store'])
+            ->middleware('permission:materials.manage');
+        Route::delete('/material-categories/{materialCategory}', [MaterialCategoryController::class, 'destroy'])
+            ->middleware('permission:materials.manage');
     });
 
 });
