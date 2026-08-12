@@ -48,8 +48,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'materials.view', 'materials.manage',
             'warehouse.view', 'warehouse.manage',
 
-            // Purchases
-            'purchases.view', 'purchases.create', 'purchases.approve',
+            // Purchase Workflow (Module 14)
+            'purchases.view', 'purchases.create', 'purchases.approve', 'purchases.receive',
 
             // Attendance & leave
             'attendance.view', 'attendance.manage',
@@ -90,7 +90,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'projects.view', 'reports.view',
             'boq.view', 'boq.create', 'boq.update', 'boq.delete',
             'materials.view', 'warehouse.view',
-            'purchases.view', 'purchases.approve',
+            'purchases.view', 'purchases.create', 'purchases.approve', 'purchases.receive',
             'attendance.view', 'leave.view', 'leave.approve',
             'payroll.view', 'expenses.view',
             'dashboard.view', 'analytics.view',
@@ -128,7 +128,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $store->syncPermissions([
             'materials.view', 'materials.manage',
             'warehouse.view', 'warehouse.manage',
-            'purchases.view', 'purchases.create',
+            'purchases.view', 'purchases.create', 'purchases.receive',
             'leave.request',
             'dashboard.view',
         ]);
