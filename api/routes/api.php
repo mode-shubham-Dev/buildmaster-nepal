@@ -23,6 +23,8 @@ use App\Http\Controllers\Api\MilestoneController;
 use App\Http\Controllers\Api\SiteReportController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MaterialCategoryController;
+use App\Http\Controllers\Api\WarehouseController;
+use App\Http\Controllers\Api\StockController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -250,6 +252,28 @@ Route::prefix('v1')->group(function () {
         Route::post('/material-categories', [MaterialCategoryController::class, 'store'])
             ->middleware('permission:materials.manage');
         Route::delete('/material-categories/{materialCategory}', [MaterialCategoryController::class, 'destroy'])
+            ->middleware('permission:materials.manage');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 13 — Warehouse & Stock Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('warehouses', WarehouseController::class)
+            ->middleware([
+                'index'   => 'permission:materials.view',
+                'show'    => 'permission:materials.view',
+                'store'   => 'permission:materials.manage',
+                'update'  => 'permission:materials.manage',
+                'destroy' => 'permission:materials.manage',
+            ]);
+
+        // Stock — ledger + derived balances
+        Route::get('/stock/levels', [StockController::class, 'levels'])
+            ->middleware('permission:materials.view');
+        Route::get('/stock/movements', [StockController::class, 'movements'])
+            ->middleware('permission:materials.view');
+        Route::post('/stock/movements', [StockController::class, 'record'])
             ->middleware('permission:materials.manage');
     });
 
