@@ -25,6 +25,8 @@ use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\MaterialCategoryController;
 use App\Http\Controllers\Api\WarehouseController;
 use App\Http\Controllers\Api\StockController;
+use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -275,6 +277,43 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:materials.view');
         Route::post('/stock/movements', [StockController::class, 'record'])
             ->middleware('permission:materials.manage');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 14 — Purchase Workflow
+        |------------------------------------------------------------------
+        */
+        // Suppliers (light — full management in Module 15)
+        Route::apiResource('suppliers', SupplierController::class)
+            ->middleware([
+                'index'   => 'permission:purchases.view',
+                'show'    => 'permission:purchases.view',
+                'store'   => 'permission:purchases.create',
+                'update'  => 'permission:purchases.create',
+                'destroy' => 'permission:purchases.create',
+            ]);
+
+        // Purchase orders — CRUD
+        Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])
+            ->middleware('permission:purchases.view');
+        Route::get('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])
+            ->middleware('permission:purchases.view');
+        Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])
+            ->middleware('permission:purchases.create');
+        Route::delete('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'destroy'])
+            ->middleware('permission:purchases.create');
+
+        // State machine transitions — each gated by the right permission
+        Route::post('/purchase-orders/{purchaseOrder}/submit', [PurchaseOrderController::class, 'submit'])
+            ->middleware('permission:purchases.create');
+        Route::post('/purchase-orders/{purchaseOrder}/approve', [PurchaseOrderController::class, 'approve'])
+            ->middleware('permission:purchases.approve');
+        Route::post('/purchase-orders/{purchaseOrder}/reject', [PurchaseOrderController::class, 'reject'])
+            ->middleware('permission:purchases.approve');
+        Route::post('/purchase-orders/{purchaseOrder}/cancel', [PurchaseOrderController::class, 'cancel'])
+            ->middleware('permission:purchases.create');
+        Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'receive'])
+            ->middleware('permission:purchases.receive');
     });
 
 });
