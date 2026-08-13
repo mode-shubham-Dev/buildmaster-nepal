@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\WarehouseController;
 use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\PurchaseOrderController;
+use App\Http\Controllers\Api\SupplierContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -292,6 +293,14 @@ Route::prefix('v1')->group(function () {
                 'update'  => 'permission:purchases.create',
                 'destroy' => 'permission:purchases.create',
             ]);
+
+        // Supplier contacts + documents (Module 15)
+        Route::post('/suppliers/{supplier}/contacts', [SupplierContactController::class, 'store'])
+            ->middleware('permission:purchases.create');
+        Route::delete('/supplier-contacts/{supplierContact}', [SupplierContactController::class, 'destroy'])
+            ->middleware('permission:purchases.create');
+        Route::post('/suppliers/{supplier}/documents', [SupplierContactController::class, 'uploadDocument'])
+            ->middleware('permission:purchases.create');
 
         // Purchase orders — CRUD
         Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])

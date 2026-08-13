@@ -15,12 +15,17 @@ class StoreSupplierRequest extends FormRequest
     {
         return [
             'name'           => ['required', 'string', 'max:255'],
+            'category'       => ['nullable', 'string', 'max:255'],
             'contact_person' => ['nullable', 'string', 'max:255'],
             'phone'          => ['nullable', 'string', 'max:50'],
             'email'          => ['nullable', 'email', 'max:255'],
             'pan_vat_no'     => ['nullable', 'string', 'max:100'],
             'address'        => ['nullable', 'string'],
             'is_active'      => ['boolean'],
+            'rating'         => ['nullable', 'integer', 'min:1', 'max:5'],
+            'payment_terms'  => ['nullable', 'string', 'max:255'],
+            'bank_name'      => ['nullable', 'string', 'max:255'],
+            'bank_account'   => ['nullable', 'string', 'max:100'],
         ];
     }
 }
