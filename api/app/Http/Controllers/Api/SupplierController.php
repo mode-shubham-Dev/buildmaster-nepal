@@ -12,8 +12,11 @@ class SupplierController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $suppliers = Supplier::when($request->search, fn ($q) =>
-            $q->where('name', 'like', "%{$request->search}%"))
+        $suppliers = Supplier::withCount('purchaseOrders')
+            ->when($request->search, fn ($q) =>
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('category', 'like', "%{$request->search}%"))
+            ->when($request->category, fn ($q) => $q->where('category', $request->category))
             ->latest()
             ->get();
 
@@ -30,9 +33,32 @@ class SupplierController extends Controller
         ], 201);
     }
 
+    /**
+     * Full supplier profile with DERIVED purchase history + stats.
+     */
     public function show(Supplier $supplier): JsonResponse
     {
-        return response()->json(['supplier' => $supplier]);
+        $supplier->load(['contacts', 'attachments']);
+
+        // Purchase history — derived from their existing POs (linked via M14)
+        $orders = $supplier->purchaseOrders()
+            ->select('id', 'po_number', 'status', 'total', 'order_date', 'supplier_id')
+            ->latest('order_date')
+            ->get();
+
+        // Performance stats — computed from the POs
+        $receivedOrders = $orders->where('status', 'received');
+        $stats = [
+            'total_orders'    => $orders->count(),
+            'received_orders' => $receivedOrders->count(),
+            'total_value'     => (float) $receivedOrders->sum('total'),  // value of completed purchases
+        ];
+
+        return response()->json([
+            'supplier'         => $supplier,
+            'purchase_history' => $orders,
+            'stats'            => $stats,
+        ]);
     }
 
     public function update(StoreSupplierRequest $request, Supplier $supplier): JsonResponse
