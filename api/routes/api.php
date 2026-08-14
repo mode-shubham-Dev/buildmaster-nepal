@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\PurchaseOrderController;
 use App\Http\Controllers\Api\SupplierContactController;
 use App\Http\Controllers\Api\SubcontractorController;
 use App\Http\Controllers\Api\WorkPackageController;
+use App\Http\Controllers\Api\EquipmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -356,7 +357,30 @@ Route::prefix('v1')->group(function () {
         Route::post('/work-packages/{workPackage}/payments', [WorkPackageController::class, 'pay'])
             ->middleware('permission:subcontractors.pay');
         Route::delete('/subcontractor-payments/{payment}', [WorkPackageController::class, 'deletePayment'])
-            ->middleware('permission:subcontractors.pay');   
+            ->middleware('permission:subcontractors.pay'); 
+            
+        /*
+        |------------------------------------------------------------------
+        | Module 17 — Equipment & Machinery Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('equipment', EquipmentController::class)
+            ->parameters(['equipment' => 'equipment'])   // avoid 'equipments' param name
+            ->middleware([
+                'index'   => 'permission:equipment.view',
+                'show'    => 'permission:equipment.view',
+                'store'   => 'permission:equipment.manage',
+                'update'  => 'permission:equipment.manage',
+                'destroy' => 'permission:equipment.manage',
+            ]);
+
+        // Assignment + maintenance
+        Route::post('/equipment/{equipment}/assign', [EquipmentController::class, 'assign'])
+            ->middleware('permission:equipment.manage');
+        Route::post('/equipment/{equipment}/maintenance', [EquipmentController::class, 'logMaintenance'])
+            ->middleware('permission:equipment.manage');
+        Route::delete('/equipment-maintenance/{maintenance}', [EquipmentController::class, 'deleteMaintenance'])
+            ->middleware('permission:equipment.manage');
     });
 
 });
