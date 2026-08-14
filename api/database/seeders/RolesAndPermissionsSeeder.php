@@ -57,6 +57,9 @@ class RolesAndPermissionsSeeder extends Seeder
             // Equipment (Module 17)
             'equipment.view', 'equipment.manage',
 
+            // Vehicles (Module 18)
+            'vehicles.view', 'vehicles.manage',
+
             // Attendance & leave
             'attendance.view', 'attendance.manage',
             'leave.view', 'leave.request', 'leave.approve',
@@ -99,6 +102,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'purchases.view', 'purchases.create', 'purchases.approve', 'purchases.receive',
             'subcontractors.view', 'subcontractors.manage', 'subcontractors.pay',
             'equipment.view', 'equipment.manage',
+            'vehicles.view', 'vehicles.manage',
             'attendance.view', 'leave.view', 'leave.approve',
             'payroll.view', 'expenses.view',
             'dashboard.view', 'analytics.view',
@@ -116,6 +120,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'purchases.view', 'purchases.create', 'purchases.approve',
             'subcontractors.view', 'subcontractors.manage',
             'equipment.view', 'equipment.manage',
+            'vehicles.view', 'vehicles.manage',
             'attendance.view', 'leave.view', 'leave.approve',
             'expenses.view', 'expenses.create',
             'dashboard.view',
@@ -140,6 +145,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'warehouse.view', 'warehouse.manage',
             'purchases.view', 'purchases.create', 'purchases.receive',
             'equipment.view', 'equipment.manage',
+            'vehicles.view', 'vehicles.manage',
             'leave.request',
             'dashboard.view',
         ]);
