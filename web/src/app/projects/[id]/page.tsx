@@ -33,8 +33,9 @@ import { fetchEmployees } from "@/lib/employees-api";
 import { BoqTab } from "@/components/project/boq-tab";
 import { MilestonesTab } from "@/components/project/milestones-tab";
 import { SiteReportsTab } from "@/components/project/site-reports-tab";
+import { SubcontractorsTab } from "@/components/project/subcontractors-tab";
 
-type Tab = "overview" | "team" | "boq" | "milestones" | "reports";
+type Tab = "overview" | "team" | "boq" | "milestones" | "reports" | "subcontractors";
 
 const STATUS_META: Record<ProjectStatus, { label: string; color: string }> = {
   planning: { label: "Planning", color: "bg-slate-100 text-slate-600" },
@@ -123,6 +124,7 @@ function ProfileContent() {
             { id: "boq" as Tab, label: "BOQ", icon: <Calculator className="h-4 w-4" /> },
             { id: "milestones" as Tab, label: "Milestones", icon: <Flag className="h-4 w-4" /> },
             { id: "reports" as Tab, label: "Site Reports", icon: <ClipboardList className="h-4 w-4" /> },
+            { id: "subcontractors" as Tab, label: "Subcontractors", icon: <HardHat className="h-4 w-4" /> },
           ].map((t) => (
             <button
               key={t.id}
@@ -146,6 +148,7 @@ function ProfileContent() {
         {tab === "boq" && <BoqTab projectId={id} canManage={can("boq.create")} />}
         {tab === "milestones" && <MilestonesTab projectId={id} canManage={can("projects.update")} />}
         {tab === "reports" && <SiteReportsTab projectId={id} canManage={can("reports.create")} />}
+        {tab === "subcontractors" && <SubcontractorsTab projectId={id} />}
       </div>
     </div>
   );
