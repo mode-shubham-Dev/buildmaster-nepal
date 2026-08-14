@@ -51,6 +51,9 @@ class RolesAndPermissionsSeeder extends Seeder
             // Purchase Workflow (Module 14)
             'purchases.view', 'purchases.create', 'purchases.approve', 'purchases.receive',
 
+            // Subcontractors (Module 16)
+            'subcontractors.view', 'subcontractors.manage', 'subcontractors.pay',
+
             // Attendance & leave
             'attendance.view', 'attendance.manage',
             'leave.view', 'leave.request', 'leave.approve',
@@ -91,6 +94,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'boq.view', 'boq.create', 'boq.update', 'boq.delete',
             'materials.view', 'warehouse.view',
             'purchases.view', 'purchases.create', 'purchases.approve', 'purchases.receive',
+            'subcontractors.view', 'subcontractors.manage', 'subcontractors.pay',
             'attendance.view', 'leave.view', 'leave.approve',
             'payroll.view', 'expenses.view',
             'dashboard.view', 'analytics.view',
@@ -106,6 +110,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'reports.view', 'reports.create',
             'materials.view', 'warehouse.view',
             'purchases.view', 'purchases.create', 'purchases.approve',
+            'subcontractors.view', 'subcontractors.manage',
             'attendance.view', 'leave.view', 'leave.approve',
             'expenses.view', 'expenses.create',
             'dashboard.view',
@@ -139,6 +144,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'clients.view',
             'boq.view',
             'purchases.view',
+            'subcontractors.view', 'subcontractors.pay',
             'payroll.view', 'payroll.process',
             'expenses.view', 'expenses.create',
             'leave.request',

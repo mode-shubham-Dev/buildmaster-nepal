@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\PurchaseOrderController;
 use App\Http\Controllers\Api\SupplierContactController;
+use App\Http\Controllers\Api\SubcontractorController;
+use App\Http\Controllers\Api\WorkPackageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -323,6 +325,38 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:purchases.create');
         Route::post('/purchase-orders/{purchaseOrder}/receive', [PurchaseOrderController::class, 'receive'])
             ->middleware('permission:purchases.receive');
+
+         /*
+        |------------------------------------------------------------------
+        | Module 16 — Subcontractor Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('subcontractors', SubcontractorController::class)
+            ->middleware([
+                'index'   => 'permission:subcontractors.view',
+                'show'    => 'permission:subcontractors.view',
+                'store'   => 'permission:subcontractors.manage',
+                'update'  => 'permission:subcontractors.manage',
+                'destroy' => 'permission:subcontractors.manage',
+            ]);
+
+        // Work packages
+        Route::get('/projects/{project}/work-packages', [WorkPackageController::class, 'forProject'])
+            ->middleware('permission:subcontractors.view');
+        Route::get('/work-packages/{workPackage}', [WorkPackageController::class, 'show'])
+            ->middleware('permission:subcontractors.view');
+        Route::post('/work-packages', [WorkPackageController::class, 'store'])
+            ->middleware('permission:subcontractors.manage');
+        Route::put('/work-packages/{workPackage}', [WorkPackageController::class, 'update'])
+            ->middleware('permission:subcontractors.manage');
+        Route::delete('/work-packages/{workPackage}', [WorkPackageController::class, 'destroy'])
+            ->middleware('permission:subcontractors.manage');
+
+        // Payments — gated by the distinct 'pay' permission
+        Route::post('/work-packages/{workPackage}/payments', [WorkPackageController::class, 'pay'])
+            ->middleware('permission:subcontractors.pay');
+        Route::delete('/subcontractor-payments/{payment}', [WorkPackageController::class, 'deletePayment'])
+            ->middleware('permission:subcontractors.pay');   
     });
 
 });
