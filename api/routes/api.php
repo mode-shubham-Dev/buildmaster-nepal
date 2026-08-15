@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\SupplierContactController;
 use App\Http\Controllers\Api\SubcontractorController;
 use App\Http\Controllers\Api\WorkPackageController;
 use App\Http\Controllers\Api\EquipmentController;
+use App\Http\Controllers\Api\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -381,6 +382,32 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:equipment.manage');
         Route::delete('/equipment-maintenance/{maintenance}', [EquipmentController::class, 'deleteMaintenance'])
             ->middleware('permission:equipment.manage');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 18 — Vehicle & Fleet Management
+        |------------------------------------------------------------------
+        */
+        Route::apiResource('vehicles', VehicleController::class)
+            ->middleware([
+                'index'   => 'permission:vehicles.view',
+                'show'    => 'permission:vehicles.view',
+                'store'   => 'permission:vehicles.manage',
+                'update'  => 'permission:vehicles.manage',
+                'destroy' => 'permission:vehicles.manage',
+            ]);
+
+        // Assignment + fuel + maintenance
+        Route::post('/vehicles/{vehicle}/assign', [VehicleController::class, 'assign'])
+            ->middleware('permission:vehicles.manage');
+        Route::post('/vehicles/{vehicle}/fuel', [VehicleController::class, 'logFuel'])
+            ->middleware('permission:vehicles.manage');
+        Route::post('/vehicles/{vehicle}/maintenance', [VehicleController::class, 'logMaintenance'])
+            ->middleware('permission:vehicles.manage');
+        Route::delete('/vehicle-fuel-logs/{fuelLog}', [VehicleController::class, 'deleteFuelLog'])
+            ->middleware('permission:vehicles.manage');
+        Route::delete('/vehicle-maintenance/{maintenance}', [VehicleController::class, 'deleteMaintenance'])
+            ->middleware('permission:vehicles.manage');
     });
 
 });
