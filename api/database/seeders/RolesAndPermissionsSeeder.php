@@ -64,8 +64,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'attendance.view', 'attendance.mark', 'attendance.manage',
             'leave.view', 'leave.request', 'leave.approve',
 
-            // Payroll & finance
-            'payroll.view', 'payroll.process',
+            // Payroll (Module 21) — money-critical, strong separation of duties
+            'payroll.view', 'payroll.process', 'payroll.finalize',
             'expenses.view', 'expenses.create',
 
             // BOQ & Estimation (Module 9)
@@ -104,7 +104,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'equipment.view', 'equipment.manage',
             'vehicles.view', 'vehicles.manage',
             'attendance.view', 'attendance.mark', 'leave.view', 'leave.request', 'leave.approve',
-            'payroll.view', 'expenses.view',
+            'payroll.view', 'payroll.process', 'payroll.finalize', 'expenses.view',
             'dashboard.view', 'analytics.view',
         ]);
 
@@ -157,7 +157,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'boq.view',
             'purchases.view',
             'subcontractors.view', 'subcontractors.pay',
-            'payroll.view', 'payroll.process',
+            'payroll.view', 'payroll.process', 'payroll.finalize',
             'expenses.view', 'expenses.create',
             'leave.view', 'leave.request',
             'dashboard.view', 'analytics.view',
@@ -169,7 +169,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'employees.view', 'employees.create', 'employees.update', 'employees.delete',
             'attendance.view', 'attendance.mark', 'attendance.manage',
             'leave.view', 'leave.request', 'leave.approve',
-            'payroll.view',
+            'payroll.view', 'payroll.process',
             'dashboard.view',
         ]);
 

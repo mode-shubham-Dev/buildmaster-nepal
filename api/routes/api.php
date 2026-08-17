@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\EquipmentController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\LeaveController;
+use App\Http\Controllers\Api\PayrollController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -438,6 +439,29 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:leave.approve');
         Route::delete('/leave-requests/{leaveRequest}', [LeaveController::class, 'destroy'])
             ->middleware('permission:leave.request');
+
+        
+        /*
+        |------------------------------------------------------------------
+        | Module 21 — Payroll (money-critical)
+        |------------------------------------------------------------------
+        */
+        Route::get('/payroll-runs', [PayrollController::class, 'index'])
+            ->middleware('permission:payroll.view');
+        Route::get('/payroll-runs/{payrollRun}', [PayrollController::class, 'show'])
+            ->middleware('permission:payroll.view');
+        Route::post('/payroll-runs', [PayrollController::class, 'store'])
+            ->middleware('permission:payroll.process');
+        Route::post('/payroll-runs/{payrollRun}/generate', [PayrollController::class, 'generate'])
+            ->middleware('permission:payroll.process');
+        Route::post('/payslips/{payslip}/lines', [PayrollController::class, 'addLine'])
+            ->middleware('permission:payroll.process');
+        Route::delete('/payslip-lines/{line}', [PayrollController::class, 'removeLine'])
+            ->middleware('permission:payroll.process');
+        Route::post('/payroll-runs/{payrollRun}/finalize', [PayrollController::class, 'finalize'])
+            ->middleware('permission:payroll.finalize');   // the highest privilege
+        Route::delete('/payroll-runs/{payrollRun}', [PayrollController::class, 'destroy'])
+            ->middleware('permission:payroll.process');
     });
 
 });
