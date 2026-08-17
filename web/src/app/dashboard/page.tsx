@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/protected-route";
-import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane } from "lucide-react";
+import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign } from "lucide-react";
 import Link from "next/link";
 
 function DashboardContent() {
@@ -326,6 +326,24 @@ function DashboardContent() {
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Leave</p>
                   <p className="text-xs text-slate-500">Requests &amp; approvals</p>
+                </div>
+              </div>
+              <ChevronRight className="h-4 w-4 text-slate-400 transition group-hover:text-amber-500" />
+            </Link>
+          )}
+
+          {can("payroll.view") && (
+            <Link
+              href="/payroll"
+              className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-5 transition hover:border-amber-300 hover:shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                  <CircleDollarSign className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Payroll</p>
+                  <p className="text-xs text-slate-500">Salary runs &amp; payslips</p>
                 </div>
               </div>
               <ChevronRight className="h-4 w-4 text-slate-400 transition group-hover:text-amber-500" />
