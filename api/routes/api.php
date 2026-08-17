@@ -35,6 +35,7 @@ use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\PayrollController;
+use App\Http\Controllers\Api\ExpenseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -462,6 +463,37 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:payroll.finalize');   // the highest privilege
         Route::delete('/payroll-runs/{payrollRun}', [PayrollController::class, 'destroy'])
             ->middleware('permission:payroll.process');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 22 — Expenses & Petty Cash
+        |------------------------------------------------------------------
+        */
+        Route::get('/expense-categories', [ExpenseController::class, 'categories'])
+            ->middleware('permission:expenses.view');
+
+        Route::get('/expenses', [ExpenseController::class, 'index'])
+            ->middleware('permission:expenses.view');
+        Route::get('/expenses/{expense}', [ExpenseController::class, 'show'])
+            ->middleware('permission:expenses.view');
+        Route::post('/expenses', [ExpenseController::class, 'store'])
+            ->middleware('permission:expenses.create');
+        Route::post('/expenses/{expense}/action', [ExpenseController::class, 'action'])
+            ->middleware('permission:expenses.approve');
+        Route::post('/expenses/{expense}/receipt', [ExpenseController::class, 'uploadReceipt'])
+            ->middleware('permission:expenses.create');
+        Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])
+            ->middleware('permission:expenses.create');
+
+        // Petty cash
+        Route::get('/petty-cash-funds', [ExpenseController::class, 'funds'])
+            ->middleware('permission:expenses.view');
+        Route::get('/petty-cash-funds/{fund}', [ExpenseController::class, 'showFund'])
+            ->middleware('permission:expenses.view');
+        Route::post('/petty-cash-funds', [ExpenseController::class, 'storeFund'])
+            ->middleware('permission:expenses.approve');
+        Route::post('/petty-cash-funds/{fund}/topup', [ExpenseController::class, 'topup'])
+            ->middleware('permission:expenses.approve');
     });
 
 });
