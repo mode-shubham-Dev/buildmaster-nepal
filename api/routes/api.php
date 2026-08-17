@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\SubcontractorController;
 use App\Http\Controllers\Api\WorkPackageController;
 use App\Http\Controllers\Api\EquipmentController;
 use App\Http\Controllers\Api\VehicleController;
+use App\Http\Controllers\Api\AttendanceController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -408,6 +409,18 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:vehicles.manage');
         Route::delete('/vehicle-maintenance/{maintenance}', [VehicleController::class, 'deleteMaintenance'])
             ->middleware('permission:vehicles.manage');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 19 — Attendance
+        |------------------------------------------------------------------
+        */
+        Route::get('/attendance/roster', [AttendanceController::class, 'roster'])
+            ->middleware('permission:attendance.view');
+        Route::post('/attendance/mark', [AttendanceController::class, 'markBulk'])
+            ->middleware('permission:attendance.mark');
+        Route::get('/employees/{employee}/attendance', [AttendanceController::class, 'forEmployee'])
+            ->middleware('permission:attendance.view');
     });
 
 });
