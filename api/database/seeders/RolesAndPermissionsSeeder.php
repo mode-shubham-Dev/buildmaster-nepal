@@ -103,7 +103,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'subcontractors.view', 'subcontractors.manage', 'subcontractors.pay',
             'equipment.view', 'equipment.manage',
             'vehicles.view', 'vehicles.manage',
-            'attendance.view', 'attendance.mark', 'leave.view', 'leave.approve',
+            'attendance.view', 'attendance.mark', 'leave.view', 'leave.request', 'leave.approve',
             'payroll.view', 'expenses.view',
             'dashboard.view', 'analytics.view',
         ]);
@@ -121,7 +121,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'subcontractors.view', 'subcontractors.manage',
             'equipment.view', 'equipment.manage',
             'vehicles.view', 'vehicles.manage',
-            'attendance.view', 'attendance.mark', 'leave.view', 'leave.approve',
+            'attendance.view', 'attendance.mark', 'leave.view', 'leave.request', 'leave.approve',
             'expenses.view', 'expenses.create',
             'dashboard.view',
         ]);
@@ -134,7 +134,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'materials.view',
             'purchases.create',
             'attendance.view',
-            'leave.request',
+            'leave.view', 'leave.request',
             'dashboard.view',
         ]);
 
@@ -146,7 +146,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'purchases.view', 'purchases.create', 'purchases.receive',
             'equipment.view', 'equipment.manage',
             'vehicles.view', 'vehicles.manage',
-            'leave.request',
+            'leave.view', 'leave.request',
             'dashboard.view',
         ]);
 
@@ -159,7 +159,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'subcontractors.view', 'subcontractors.pay',
             'payroll.view', 'payroll.process',
             'expenses.view', 'expenses.create',
-            'leave.request',
+            'leave.view', 'leave.request',
             'dashboard.view', 'analytics.view',
         ]);
 
@@ -168,7 +168,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $hr->syncPermissions([
             'employees.view', 'employees.create', 'employees.update', 'employees.delete',
             'attendance.view', 'attendance.mark', 'attendance.manage',
-            'leave.view', 'leave.approve',
+            'leave.view', 'leave.request', 'leave.approve',
             'payroll.view',
             'dashboard.view',
         ]);

@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\WorkPackageController;
 use App\Http\Controllers\Api\EquipmentController;
 use App\Http\Controllers\Api\VehicleController;
 use App\Http\Controllers\Api\AttendanceController;
+use App\Http\Controllers\Api\LeaveController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -421,6 +422,22 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:attendance.mark');
         Route::get('/employees/{employee}/attendance', [AttendanceController::class, 'forEmployee'])
             ->middleware('permission:attendance.view');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 20 — Leave Management
+        |------------------------------------------------------------------
+        */
+        Route::get('/leave-types', [LeaveController::class, 'types'])
+            ->middleware('permission:leave.view');
+        Route::get('/leave-requests', [LeaveController::class, 'index'])
+            ->middleware('permission:leave.view');
+        Route::post('/leave-requests', [LeaveController::class, 'store'])
+            ->middleware('permission:leave.request');
+        Route::post('/leave-requests/{leaveRequest}/action', [LeaveController::class, 'action'])
+            ->middleware('permission:leave.approve');
+        Route::delete('/leave-requests/{leaveRequest}', [LeaveController::class, 'destroy'])
+            ->middleware('permission:leave.request');
     });
 
 });
