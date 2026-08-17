@@ -60,8 +60,8 @@ class RolesAndPermissionsSeeder extends Seeder
             // Vehicles (Module 18)
             'vehicles.view', 'vehicles.manage',
 
-            // Attendance & leave
-            'attendance.view', 'attendance.manage',
+            // Attendance & leave (Module 19)
+            'attendance.view', 'attendance.mark', 'attendance.manage',
             'leave.view', 'leave.request', 'leave.approve',
 
             // Payroll & finance
@@ -103,7 +103,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'subcontractors.view', 'subcontractors.manage', 'subcontractors.pay',
             'equipment.view', 'equipment.manage',
             'vehicles.view', 'vehicles.manage',
-            'attendance.view', 'leave.view', 'leave.approve',
+            'attendance.view', 'attendance.mark', 'leave.view', 'leave.approve',
             'payroll.view', 'expenses.view',
             'dashboard.view', 'analytics.view',
         ]);
@@ -121,7 +121,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'subcontractors.view', 'subcontractors.manage',
             'equipment.view', 'equipment.manage',
             'vehicles.view', 'vehicles.manage',
-            'attendance.view', 'leave.view', 'leave.approve',
+            'attendance.view', 'attendance.mark', 'leave.view', 'leave.approve',
             'expenses.view', 'expenses.create',
             'dashboard.view',
         ]);
@@ -167,7 +167,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $hr = Role::firstOrCreate(['name' => 'HR Manager', 'guard_name' => 'web']);
         $hr->syncPermissions([
             'employees.view', 'employees.create', 'employees.update', 'employees.delete',
-            'attendance.view', 'attendance.manage',
+            'attendance.view', 'attendance.mark', 'attendance.manage',
             'leave.view', 'leave.approve',
             'payroll.view',
             'dashboard.view',

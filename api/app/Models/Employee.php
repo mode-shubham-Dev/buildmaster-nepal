@@ -67,6 +67,11 @@ class Employee extends Model
         return $this->hasMany(Certification::class);
     }
 
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     public function proects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'project_members')
