@@ -37,6 +37,7 @@ use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\PayrollController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\RaBillController;
+use App\Http\Controllers\Api\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -515,6 +516,23 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:billing.approve');
         Route::delete('/ra-bills/{raBill}', [RaBillController::class, 'destroy'])
             ->middleware('permission:billing.create');
+
+        
+                /*
+        |------------------------------------------------------------------
+        | Module 24 — Document Management
+        |------------------------------------------------------------------
+        */
+        Route::get('/document-categories', [DocumentController::class, 'categories'])
+            ->middleware('permission:documents.view');
+        Route::get('/documents', [DocumentController::class, 'index'])
+            ->middleware('permission:documents.view');
+        Route::post('/documents', [DocumentController::class, 'store'])
+            ->middleware('permission:documents.manage');
+        Route::put('/documents/{document}', [DocumentController::class, 'update'])
+            ->middleware('permission:documents.manage');
+        Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])
+            ->middleware('permission:documents.manage');
     });
 
 });
