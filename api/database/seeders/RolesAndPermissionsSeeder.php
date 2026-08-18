@@ -70,6 +70,9 @@ class RolesAndPermissionsSeeder extends Seeder
             // Expenses & Petty Cash (Module 22)
             'expenses.view', 'expenses.create', 'expenses.approve',
 
+            // Client Billing / RA Bills (Module 23)
+            'billing.view', 'billing.create', 'billing.approve',
+
             // BOQ & Estimation (Module 9)
             'boq.view', 'boq.create', 'boq.update', 'boq.delete',
 
@@ -108,6 +111,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'attendance.view', 'attendance.mark', 'leave.view', 'leave.request', 'leave.approve',
             'payroll.view', 'payroll.process', 'payroll.finalize',
             'expenses.view', 'expenses.create', 'expenses.approve',
+            'billing.view', 'billing.create', 'billing.approve',
             'dashboard.view', 'analytics.view',
         ]);
 
@@ -126,6 +130,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'vehicles.view', 'vehicles.manage',
             'attendance.view', 'attendance.mark', 'leave.view', 'leave.request', 'leave.approve',
             'expenses.view', 'expenses.create', 'expenses.approve',
+            'billing.view', 'billing.create',
             'dashboard.view',
         ]);
 
@@ -164,6 +169,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'subcontractors.view', 'subcontractors.pay',
             'payroll.view', 'payroll.process', 'payroll.finalize',
             'expenses.view', 'expenses.create', 'expenses.approve',
+            'billing.view', 'billing.create', 'billing.approve',
             'leave.view', 'leave.request',
             'dashboard.view', 'analytics.view',
         ]);

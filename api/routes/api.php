@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\LeaveController;
 use App\Http\Controllers\Api\PayrollController;
 use App\Http\Controllers\Api\ExpenseController;
+use App\Http\Controllers\Api\RaBillController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -494,6 +495,26 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:expenses.approve');
         Route::post('/petty-cash-funds/{fund}/topup', [ExpenseController::class, 'topup'])
             ->middleware('permission:expenses.approve');
+
+                /*
+        |------------------------------------------------------------------
+        | Module 23 — Client Billing / RA Bills
+        |------------------------------------------------------------------
+        */
+        Route::get('/ra-bills', [RaBillController::class, 'index'])
+            ->middleware('permission:billing.view');
+        Route::get('/projects/{project}/billing-basis', [RaBillController::class, 'billingBasis'])
+            ->middleware('permission:billing.view');
+        Route::get('/ra-bills/{raBill}', [RaBillController::class, 'show'])
+            ->middleware('permission:billing.view');
+        Route::post('/ra-bills', [RaBillController::class, 'store'])
+            ->middleware('permission:billing.create');
+        Route::post('/ra-bills/{raBill}/transition', [RaBillController::class, 'transition'])
+            ->middleware('permission:billing.approve');
+        Route::post('/ra-bills/{raBill}/payments', [RaBillController::class, 'recordPayment'])
+            ->middleware('permission:billing.approve');
+        Route::delete('/ra-bills/{raBill}', [RaBillController::class, 'destroy'])
+            ->middleware('permission:billing.create');
     });
 
 });
