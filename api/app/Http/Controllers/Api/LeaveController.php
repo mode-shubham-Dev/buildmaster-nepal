@@ -68,6 +68,17 @@ class LeaveController extends Controller
             'actioned_at'    => now(),
         ]);
 
+        // Notify the employee's user account, if linked.
+        if ($leaveRequest->employee->user_id) {
+            \App\Support\Notify::send(
+                $leaveRequest->employee->user,
+                "leave.{$data['status']}",
+                "Leave request {$data['status']}",
+                "Your leave request has been {$data['status']}.",
+                '/leave',
+            );
+        }
+
         return response()->json(['message' => "Leave {$data['status']}."]);
     }
 
