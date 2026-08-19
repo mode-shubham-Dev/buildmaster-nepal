@@ -38,6 +38,7 @@ use App\Http\Controllers\Api\PayrollController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\RaBillController;
 use App\Http\Controllers\Api\DocumentController;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -533,6 +534,16 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:documents.manage');
         Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])
             ->middleware('permission:documents.manage');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 25 — Notifications
+        |------------------------------------------------------------------
+        */
+        Route::get('/notifications', [NotificationController::class, 'index']);
+        Route::get('/notifications/summary', [NotificationController::class, 'summary']);
+        Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead']);
+        Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
     });
 
 });
