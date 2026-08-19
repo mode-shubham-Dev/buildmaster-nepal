@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/protected-route";
+import { NotificationBell } from "@/components/notification-bell";
 import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign, Wallet, ReceiptText, FolderOpen } from "lucide-react";
 import Link from "next/link";
 
@@ -21,13 +22,16 @@ function DashboardContent() {
             </span>
           </div>
 
-          <button
-            onClick={logout}
-            className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign out
-          </button>
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <button
+              onClick={logout}
+              className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 
