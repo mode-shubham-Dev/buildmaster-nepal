@@ -40,6 +40,7 @@ use App\Http\Controllers\Api\RaBillController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -554,6 +555,14 @@ Route::prefix('v1')->group(function () {
         Route::get('/settings', [SettingController::class, 'show']);   // any authed user
         Route::put('/settings', [SettingController::class, 'update'])
             ->middleware('permission:settings.manage');
+
+                /*
+        |------------------------------------------------------------------
+        | Module 27 — Reports & Analytics
+        |------------------------------------------------------------------
+        */
+        Route::get('/reports/overview', [ReportController::class, 'overview'])
+            ->middleware('permission:reports.view');
     });
 
 });

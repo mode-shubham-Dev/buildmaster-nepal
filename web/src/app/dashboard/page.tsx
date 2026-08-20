@@ -3,7 +3,7 @@
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/protected-route";
 import { NotificationBell } from "@/components/notification-bell";
-import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign, Wallet, ReceiptText, FolderOpen, Settings } from "lucide-react";
+import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign, Wallet, ReceiptText, FolderOpen, Settings, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { todayBS } from "@/lib/bikram-sambat";
 
@@ -406,6 +406,24 @@ function DashboardContent() {
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Documents</p>
                   <p className="text-xs text-slate-500">Central document library</p>
+                </div>
+              </div>
+              <ChevronRight className="h-4 w-4 text-slate-400 transition group-hover:text-amber-500" />
+            </Link>
+          )}
+
+          {can("reports.view") && (
+            <Link
+              href="/reports"
+              className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-5 transition hover:border-amber-300 hover:shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                  <BarChart3 className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Reports</p>
+                  <p className="text-xs text-slate-500">Analytics &amp; insights</p>
                 </div>
               </div>
               <ChevronRight className="h-4 w-4 text-slate-400 transition group-hover:text-amber-500" />

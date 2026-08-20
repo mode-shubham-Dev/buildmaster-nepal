@@ -77,6 +77,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'documents.view', 'documents.manage',
             // Settings (Module 26)
             'settings.manage',
+            // Reports & Analytics (Module 27)
+            'reports.view',
 
             // BOQ & Estimation (Module 9)
             'boq.view', 'boq.create', 'boq.update', 'boq.delete',
@@ -119,6 +121,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'billing.view', 'billing.create', 'billing.approve',
             'documents.view', 'documents.manage',
             'settings.manage',
+            // CEO, PM, Accountant
+            'reports.view',
             'dashboard.view', 'analytics.view',
         ]);
 
@@ -138,6 +142,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'attendance.view', 'attendance.mark', 'leave.view', 'leave.request', 'leave.approve',
             'expenses.view', 'expenses.create', 'expenses.approve',
             'billing.view', 'billing.create',
+            // CEO, PM, Accountant
+            'reports.view',
             'documents.view', 'documents.manage',
             'dashboard.view',
         ]);
@@ -181,6 +187,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'expenses.view', 'expenses.create', 'expenses.approve',
             'billing.view', 'billing.create', 'billing.approve',
             'documents.view', 'documents.manage',
+            // CEO, PM, Accountant
+            'reports.view',
             'leave.view', 'leave.request',
             'dashboard.view', 'analytics.view',
         ]);
