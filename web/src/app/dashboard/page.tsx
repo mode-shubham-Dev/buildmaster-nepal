@@ -6,6 +6,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign, Wallet, ReceiptText, FolderOpen, Settings, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { todayBS } from "@/lib/bikram-sambat";
+import { DashboardHome } from "@/components/dashboard-home";
 
 function DashboardContent() {
   const { user, logout, can } = useAuth();
@@ -47,7 +48,10 @@ function DashboardContent() {
           You are signed in as {user?.email}
         </p>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <DashboardHome />
+
+        <h2 className="mt-8 text-xs font-semibold uppercase tracking-wide text-slate-400">Modules</h2>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {can("projects.view") && (
             <Link
               href="/projects"
