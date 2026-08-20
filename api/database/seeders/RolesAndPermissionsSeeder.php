@@ -75,6 +75,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
             // Documents (Module 24)
             'documents.view', 'documents.manage',
+            // Settings (Module 26)
+            'settings.manage',
 
             // BOQ & Estimation (Module 9)
             'boq.view', 'boq.create', 'boq.update', 'boq.delete',
@@ -116,6 +118,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'expenses.view', 'expenses.create', 'expenses.approve',
             'billing.view', 'billing.create', 'billing.approve',
             'documents.view', 'documents.manage',
+            'settings.manage',
             'dashboard.view', 'analytics.view',
         ]);
 
