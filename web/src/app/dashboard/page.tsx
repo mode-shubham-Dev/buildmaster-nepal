@@ -26,6 +26,15 @@ function DashboardContent() {
 
           <div className="flex items-center gap-2">
             <NotificationBell />
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-linear-to-br from-slate-100 to-slate-200 text-xs font-semibold text-slate-600">
+                {user?.name?.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}
+              </span>
+              <span className="hidden sm:inline">{user?.name}</span>
+            </Link>
             <button
               onClick={logout}
               className="flex items-center gap-2 rounded-md border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
