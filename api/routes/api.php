@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -563,6 +564,13 @@ Route::prefix('v1')->group(function () {
         */
         Route::get('/reports/overview', [ReportController::class, 'overview'])
             ->middleware('permission:reports.view');
+
+        /*
+        |------------------------------------------------------------------
+        | Module 28 — Role-Based Dashboard
+        |------------------------------------------------------------------
+        */
+        Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
     });
 
 });
