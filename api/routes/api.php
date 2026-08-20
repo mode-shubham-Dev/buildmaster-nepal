@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\RaBillController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -544,6 +545,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/notifications/summary', [NotificationController::class, 'summary']);
         Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead']);
         Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+
+                /*
+        |------------------------------------------------------------------
+        | Module 26 — Settings
+        |------------------------------------------------------------------
+        */
+        Route::get('/settings', [SettingController::class, 'show']);   // any authed user
+        Route::put('/settings', [SettingController::class, 'update'])
+            ->middleware('permission:settings.manage');
     });
 
 });
