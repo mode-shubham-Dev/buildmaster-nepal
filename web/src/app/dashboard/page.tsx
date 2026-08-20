@@ -3,8 +3,9 @@
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/protected-route";
 import { NotificationBell } from "@/components/notification-bell";
-import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign, Wallet, ReceiptText, FolderOpen } from "lucide-react";
+import { HardHat, LogOut, Users, ChevronRight, Building2, UserCog, Handshake, FileText, Layers, Package, Warehouse, ShoppingCart, Truck, Wrench, CalendarCheck, Plane, CircleDollarSign, Wallet, ReceiptText, FolderOpen, Settings } from "lucide-react";
 import Link from "next/link";
+import { todayBS } from "@/lib/bikram-sambat";
 
 function DashboardContent() {
   const { user, logout, can } = useAuth();
@@ -39,7 +40,10 @@ function DashboardContent() {
         <h1 className="text-2xl font-bold tracking-tight text-[#1a1d23]">
           Welcome back, {user?.name}
         </h1>
-        <p className="mt-1.5 text-sm text-slate-500">
+        <p className="mt-1.5 text-sm text-slate-400">
+          {todayBS({ np: true, weekday: true })} · {new Date().toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" })}
+        </p>
+        <p className="mt-1 text-sm text-slate-500">
           You are signed in as {user?.email}
         </p>
 
@@ -407,6 +411,22 @@ function DashboardContent() {
               <ChevronRight className="h-4 w-4 text-slate-400 transition group-hover:text-amber-500" />
             </Link>
           )}
+
+          <Link
+            href="/settings"
+            className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white p-5 transition hover:border-amber-300 hover:shadow-sm"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
+                <Settings className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Settings</p>
+                <p className="text-xs text-slate-500">Company &amp; fiscal config</p>
+              </div>
+            </div>
+            <ChevronRight className="h-4 w-4 text-slate-400 transition group-hover:text-amber-500" />
+          </Link>
 
           {can("materials.view") && (
             <Link
