@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -564,6 +565,15 @@ Route::prefix('v1')->group(function () {
         */
         Route::get('/reports/overview', [ReportController::class, 'overview'])
             ->middleware('permission:reports.view');
+
+        /*
+        |------------------------------------------------------------------
+        | Profile — self-service account management
+        |------------------------------------------------------------------
+        */
+        Route::get('/profile', [ProfileController::class, 'show']);
+        Route::put('/profile', [ProfileController::class, 'update']);
+        Route::put('/profile/password', [ProfileController::class, 'changePassword']);
 
         /*
         |------------------------------------------------------------------
