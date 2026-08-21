@@ -28,8 +28,22 @@ class PayrollService
 
             $employees = Employee::where('status', 'active')->get();
 
+            // Pre-fetch ALL approved unpaid leave requests that overlap the
+            // period in one query, then group by employee — eliminates N+1.
+            $leaveByEmployee = LeaveRequest::where('status', 'approved')
+                ->whereHas('leaveType', fn ($q) => $q->where('is_paid', false))
+                ->whereIn('employee_id', $employees->pluck('id'))
+                ->where('from_date', '<=', $run->period_end)
+                ->where('to_date', '>=', $run->period_start)
+                ->get()
+                ->groupBy('employee_id');
+
             foreach ($employees as $employee) {
-                $this->buildPayslip($run, $employee);
+                $this->buildPayslip(
+                    $run,
+                    $employee,
+                    $leaveByEmployee->get($employee->id, collect()),
+                );
             }
         });
     }
@@ -37,8 +51,10 @@ class PayrollService
     /**
      * Compute ONE payslip from source records. All math here; nothing trusted
      * from a client. Every figure is stored as a frozen snapshot.
+     *
+     * @param \Illuminate\Support\Collection<int, LeaveRequest> $leaveRequests
      */
-    protected function buildPayslip(PayrollRun $run, Employee $employee): Payslip
+    protected function buildPayslip(PayrollRun $run, Employee $employee, \Illuminate\Support\Collection $leaveRequests): Payslip
     {
         $basic = (float) ($employee->basic_salary ?? 0);
 
@@ -46,7 +62,7 @@ class PayrollService
         $perDay = $run->working_days > 0 ? $basic / $run->working_days : 0;
 
         // --- DERIVED: unpaid leave days that overlap this period ---
-        $unpaidDays = $this->unpaidLeaveDays($employee, $run);
+        $unpaidDays = $this->unpaidLeaveDays($leaveRequests, $run);
         $unpaidDeduction = round($perDay * $unpaidDays, 2);
 
         // --- earnings ---
@@ -83,18 +99,13 @@ class PayrollService
     }
 
     /**
-     * DERIVED from Module 20: count approved UNPAID leave days overlapping
-     * the run period. This is the cross-module integration.
+     * Count approved unpaid leave days (clamped to the run period) from the
+     * pre-fetched collection. No DB query — caller pre-loads for the batch.
+     *
+     * @param \Illuminate\Support\Collection<int, LeaveRequest> $requests
      */
-    protected function unpaidLeaveDays(Employee $employee, PayrollRun $run): int
+    protected function unpaidLeaveDays(\Illuminate\Support\Collection $requests, PayrollRun $run): int
     {
-        $requests = LeaveRequest::where('employee_id', $employee->id)
-            ->where('status', 'approved')
-            ->whereHas('leaveType', fn ($q) => $q->where('is_paid', false))
-            ->where('from_date', '<=', $run->period_end)
-            ->where('to_date', '>=', $run->period_start)
-            ->get();
-
         $days = 0;
         foreach ($requests as $req) {
             // clamp the leave range to the payroll period, count inclusive days

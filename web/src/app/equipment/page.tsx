@@ -37,7 +37,7 @@ function EquipmentContent() {
   const [showCreate, setShowCreate] = useState(false);
   const [detailId, setDetailId] = useState<number | null>(null);
 
-  const { data: equipment, isLoading } = useQuery({
+  const { data: equipment, isLoading, isError } = useQuery({
     queryKey: ["equipment", search, status],
     queryFn: () => fetchEquipment({ search: search || undefined, status: status || undefined }),
   });
@@ -91,6 +91,10 @@ function EquipmentContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-24">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load equipment. Please refresh and try again.
           </div>
         ) : equipment?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">

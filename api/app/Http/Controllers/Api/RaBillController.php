@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\BoqItem;
 use App\Models\Project;
 use App\Models\RaBill;
+use App\Models\RaBillLine;
 use App\Services\BillingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RaBillController extends Controller
 {
@@ -40,18 +42,26 @@ class RaBillController extends Controller
             ->orderBy('sort_order')
             ->get(['id', 'category', 'item_code', 'description', 'unit', 'quantity', 'rate']);
 
-        $basis = $items->map(function ($item) use ($project) {
-            $previous = $this->billingService->previouslyBilled($project->id, $item->id);
+        // One query for all items instead of N — MAX cumulative_qty per item across
+        // all bills for this project, keyed by boq_item_id.
+        $previousBilled = RaBillLine::join('ra_bills', 'ra_bill_lines.ra_bill_id', '=', 'ra_bills.id')
+            ->where('ra_bills.project_id', $project->id)
+            ->groupBy('ra_bill_lines.boq_item_id')
+            ->pluck(DB::raw('MAX(ra_bill_lines.cumulative_qty)'), 'ra_bill_lines.boq_item_id')
+            ->map(fn ($v) => (float) $v);
+
+        $basis = $items->map(function ($item) use ($previousBilled) {
+            $previous = $previousBilled->get($item->id, 0.0);
             return [
-                'boq_item_id'     => $item->id,
-                'category'        => $item->category,
-                'item_code'       => $item->item_code,
-                'description'     => $item->description,
-                'unit'            => $item->unit,
-                'boq_quantity'    => (float) $item->quantity,
-                'rate'            => (float) $item->rate,
+                'boq_item_id'       => $item->id,
+                'category'          => $item->category,
+                'item_code'         => $item->item_code,
+                'description'       => $item->description,
+                'unit'              => $item->unit,
+                'boq_quantity'      => (float) $item->quantity,
+                'rate'              => (float) $item->rate,
                 'previously_billed' => $previous,
-                'remaining'       => round((float) $item->quantity - $previous, 3),
+                'remaining'         => round((float) $item->quantity - $previous, 3),
             ];
         });
 

@@ -39,7 +39,7 @@ function VehiclesContent() {
   const [showCreate, setShowCreate] = useState(false);
   const [detailId, setDetailId] = useState<number | null>(null);
 
-  const { data: vehicles, isLoading } = useQuery({
+  const { data: vehicles, isLoading, isError } = useQuery({
     queryKey: ["vehicles", search, status],
     queryFn: () => fetchVehicles({ search: search || undefined, status: status || undefined }),
   });
@@ -88,6 +88,10 @@ function VehiclesContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-24">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load vehicles. Please refresh and try again.
           </div>
         ) : vehicles?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">

@@ -52,7 +52,7 @@ function ProfileContent() {
   const { can } = useAuth();
   const canManage = can("clients.update");
 
-  const { data: client, isLoading } = useQuery({
+  const { data: client, isLoading, isError } = useQuery({
     queryKey: ["client", id],
     queryFn: () => fetchClient(id),
   });
@@ -61,6 +61,14 @@ function ProfileContent() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f6f7f9]">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f6f7f9] text-sm text-red-600">
+        Failed to load client. Please refresh and try again.
       </div>
     );
   }

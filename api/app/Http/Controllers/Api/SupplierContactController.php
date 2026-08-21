@@ -40,7 +40,7 @@ class SupplierContactController extends Controller
     public function uploadDocument(Request $request, Supplier $supplier): JsonResponse
     {
         $request->validate([
-            'file' => ['required', 'file', 'max:10240'], // 10MB, any file type
+            'file' => ['required', 'file', 'max:10240', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
         ]);
 
         $attachment = $this->fileService->attach($supplier, $request->file('file'), 'documents');

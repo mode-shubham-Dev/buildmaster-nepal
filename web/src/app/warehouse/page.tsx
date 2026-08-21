@@ -142,7 +142,7 @@ function WarehouseContent() {
 function StockLevelsView({ warehouses }: { warehouses: Warehouse[] }) {
   const [warehouseId, setWarehouseId] = useState<string>("");
 
-  const { data: levels, isLoading } = useQuery({
+  const { data: levels, isLoading, isError: levelsError } = useQuery({
     queryKey: ["stock-levels", warehouseId],
     queryFn: () => fetchStockLevels(warehouseId ? Number(warehouseId) : undefined),
   });
@@ -165,6 +165,10 @@ function StockLevelsView({ warehouses }: { warehouses: Warehouse[] }) {
       {isLoading ? (
         <div className="flex justify-center py-16">
           <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
+        </div>
+      ) : levelsError ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+          Failed to load stock levels. Please refresh and try again.
         </div>
       ) : (levels?.length ?? 0) === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-300 bg-white py-12 text-center text-sm text-slate-500">
@@ -275,7 +279,7 @@ function WarehousesView({ warehouses, canManage }: { warehouses: Warehouse[]; ca
 function LedgerView({ warehouses }: { warehouses: Warehouse[] }) {
   const [warehouseId, setWarehouseId] = useState<string>("");
 
-  const { data: movements, isLoading } = useQuery({
+  const { data: movements, isLoading, isError: movementsError } = useQuery({
     queryKey: ["stock-movements", warehouseId],
     queryFn: () => fetchStockMovements(warehouseId ? { warehouse_id: Number(warehouseId) } : {}),
   });
@@ -296,6 +300,10 @@ function LedgerView({ warehouses }: { warehouses: Warehouse[] }) {
       {isLoading ? (
         <div className="flex justify-center py-16">
           <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
+        </div>
+      ) : movementsError ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+          Failed to load stock movements. Please refresh and try again.
         </div>
       ) : (movements?.length ?? 0) === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-300 bg-white py-12 text-center text-sm text-slate-500">

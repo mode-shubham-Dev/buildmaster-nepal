@@ -18,10 +18,10 @@ class WorkPackageController extends Controller
     /**
      * Work packages for a project (for the project's subcontractors tab).
      */
-    public function forProject(int $projectId): JsonResponse
+    public function forProject(\App\Models\Project $project): JsonResponse
     {
         $packages = WorkPackage::with(['subcontractor:id,name,specialty', 'payments'])
-            ->where('project_id', $projectId)
+            ->where('project_id', $project->id)
             ->latest()
             ->get();
 

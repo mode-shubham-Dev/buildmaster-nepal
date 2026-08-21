@@ -54,7 +54,7 @@ function ProfileContent() {
   const { can } = useAuth();
   const canManage = can("purchases.create");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["supplier-profile", id],
     queryFn: () => fetchSupplierProfile(id),
   });
@@ -63,6 +63,14 @@ function ProfileContent() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fafaf9] text-sm text-red-600">
+        Failed to load supplier. Please refresh and try again.
       </div>
     );
   }

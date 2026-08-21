@@ -22,10 +22,14 @@ function money(v: number, compact = false): string {
 const DONUT_COLORS = ["#f59e0b", "#3b82f6", "#8b5cf6", "#ef4444", "#10b981", "#64748b", "#ec4899"];
 
 function ReportsContent() {
-  const { data, isLoading } = useQuery({ queryKey: ["report-overview"], queryFn: fetchReportOverview });
+  const { data, isLoading, isError } = useQuery({ queryKey: ["report-overview"], queryFn: fetchReportOverview });
 
   if (isLoading || !data) {
     return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>;
+  }
+
+  if (isError) {
+    return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9] text-sm text-red-600">Failed to load reports. Please refresh and try again.</div>;
   }
 
   const { kpis, profitability, expense_breakdown, billing_collection, payroll_summary } = data;

@@ -42,7 +42,7 @@ function MaterialsContent() {
   const [materialModal, setMaterialModal] = useState<{ open: boolean; material: Material | null }>({ open: false, material: null });
   const [showCategories, setShowCategories] = useState(false);
 
-  const { data: materials, isLoading } = useQuery({
+  const { data: materials, isLoading, isError } = useQuery({
     queryKey: ["materials", search, categoryId],
     queryFn: () =>
       fetchMaterials({
@@ -133,6 +133,10 @@ function MaterialsContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load materials. Please refresh and try again.
           </div>
         ) : materials?.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white py-16">

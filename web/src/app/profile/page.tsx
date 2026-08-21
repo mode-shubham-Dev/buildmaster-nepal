@@ -14,10 +14,14 @@ import {
 
 function ProfileContent() {
   const queryClient = useQueryClient();
-  const { data: profile, isLoading } = useQuery({ queryKey: ["profile"], queryFn: fetchProfile });
+  const { data: profile, isLoading, isError } = useQuery({ queryKey: ["profile"], queryFn: fetchProfile });
 
   if (isLoading || !profile) {
     return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>;
+  }
+
+  if (isError) {
+    return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9] text-sm text-red-600">Failed to load profile. Please refresh and try again.</div>;
   }
 
   return (

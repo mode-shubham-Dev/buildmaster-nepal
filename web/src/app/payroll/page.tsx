@@ -29,7 +29,7 @@ function PayrollContent() {
   const canProcess = can("payroll.process");
   const [showCreate, setShowCreate] = useState(false);
 
-  const { data: runs, isLoading } = useQuery({
+  const { data: runs, isLoading, isError } = useQuery({
     queryKey: ["payroll-runs"],
     queryFn: fetchPayrollRuns,
   });
@@ -71,6 +71,10 @@ function PayrollContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-24">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load payroll runs. Please refresh and try again.
           </div>
         ) : runs?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">

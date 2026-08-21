@@ -20,7 +20,14 @@ class UserController extends Controller
         $users = User::with('roles')->latest()->get();
 
         return response()->json([
-            'users' => UserResource::collection($users),
+            'users' => $users->map(fn ($u) => [
+                'id'          => $u->id,
+                'name'        => $u->name,
+                'email'       => $u->email,
+                'roles'       => $u->getRoleNames(),
+                'permissions' => [],   // not needed in list; full set available on /me
+                'created_at'  => $u->created_at,
+            ]),
         ]);
     }
 
@@ -63,6 +70,8 @@ class UserController extends Controller
      */
     public function destroy(User $user): JsonResponse
     {
+        abort_if($user->id === auth()->id(), 403, 'You cannot delete your own account.');
+
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully.']);

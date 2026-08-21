@@ -49,7 +49,7 @@ function DocumentsContent() {
   const [showUpload, setShowUpload] = useState(false);
 
   const { data: categories } = useQuery({ queryKey: ["document-categories"], queryFn: fetchDocumentCategories });
-  const { data: documents, isLoading } = useQuery({
+  const { data: documents, isLoading, isError } = useQuery({
     queryKey: ["documents", search, categoryId, expiringOnly],
     queryFn: () => fetchDocuments({
       search: search || undefined,
@@ -164,6 +164,10 @@ function DocumentsContent() {
 
           {isLoading ? (
             <div className="flex items-center justify-center py-24"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>
+          ) : isError ? (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+              Failed to load documents. Please refresh and try again.
+            </div>
           ) : documents?.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 text-center">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-300"><FolderOpen className="h-7 w-7" /></div>

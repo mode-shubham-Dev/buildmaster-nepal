@@ -8,6 +8,7 @@ use App\Models\PurchaseOrder;
 use App\Services\PurchaseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PurchaseOrderController extends Controller
 {
@@ -91,11 +92,14 @@ class PurchaseOrderController extends Controller
 
     public function approve(Request $request, PurchaseOrder $purchaseOrder): JsonResponse
     {
-        $this->purchaseService->transition($purchaseOrder, 'approved');
-        $purchaseOrder->update([
-            'approved_by' => $request->user()->id,
-            'approved_at' => now(),
-        ]);
+        DB::transaction(function () use ($request, $purchaseOrder) {
+            $this->purchaseService->transition($purchaseOrder, 'approved');
+            $purchaseOrder->update([
+                'approved_by' => $request->user()->id,
+                'approved_at' => now(),
+            ]);
+        });
+
         return response()->json(['message' => 'Purchase order approved.']);
     }
 

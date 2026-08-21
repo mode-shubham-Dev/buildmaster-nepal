@@ -33,7 +33,7 @@ function LeaveContent() {
   const [filter, setFilter] = useState<string>("");
   const [showForm, setShowForm] = useState(false);
 
-  const { data: requests, isLoading } = useQuery({
+  const { data: requests, isLoading, isError } = useQuery({
     queryKey: ["leave-requests", filter],
     queryFn: () => fetchLeaveRequests(filter || undefined),
   });
@@ -93,6 +93,10 @@ function LeaveContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-24">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load leave requests. Please refresh and try again.
           </div>
         ) : requests?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">

@@ -50,19 +50,30 @@ class ReportService
      */
     public function projectProfitability(): array
     {
+        // Pre-aggregate in 3 queries instead of 3N queries
+        $billedByProject = RaBill::whereIn('status', ['approved', 'paid'])
+            ->groupBy('project_id')
+            ->pluck(DB::raw('SUM(net_payable)'), 'project_id')
+            ->map(fn ($v) => (float) $v);
+
+        $purchaseCostByProject = PurchaseOrder::where('status', 'received')
+            ->groupBy('project_id')
+            ->pluck(DB::raw('SUM(total)'), 'project_id')
+            ->map(fn ($v) => (float) $v);
+
+        $expenseCostByProject = Expense::where('status', 'approved')
+            ->whereNotNull('project_id')
+            ->groupBy('project_id')
+            ->pluck(DB::raw('SUM(amount)'), 'project_id')
+            ->map(fn ($v) => (float) $v);
+
         return Project::query()
             ->select('id', 'name', 'project_code', 'contract_value', 'status')
             ->get()
-            ->map(function ($project) {
-                $billed = (float) RaBill::where('project_id', $project->id)
-                    ->whereIn('status', ['approved', 'paid'])->sum('net_payable');
-
-                $purchaseCost = (float) PurchaseOrder::where('project_id', $project->id)
-                    ->where('status', 'received')->sum('total');
-
-                $expenseCost = (float) Expense::where('project_id', $project->id)
-                    ->where('status', 'approved')->sum('amount');
-
+            ->map(function ($project) use ($billedByProject, $purchaseCostByProject, $expenseCostByProject) {
+                $billed = $billedByProject->get($project->id, 0.0);
+                $purchaseCost = $purchaseCostByProject->get($project->id, 0.0);
+                $expenseCost = $expenseCostByProject->get($project->id, 0.0);
                 $totalCost = round($purchaseCost + $expenseCost, 2);
                 $margin = round($billed - $totalCost, 2);
                 $marginPct = $billed > 0 ? round(($margin / $billed) * 100, 1) : 0;
@@ -107,13 +118,14 @@ class ReportService
     public function billingCollection(): array
     {
         $bills = RaBill::with('project:id,name')
+            ->withSum('payments', 'amount')
             ->whereIn('status', ['approved', 'paid'])
             ->orderByDesc('bill_date')
             ->limit(20)
             ->get();
 
         return $bills->map(function ($bill) {
-            $paid = (float) $bill->payments()->sum('amount');
+            $paid = (float) ($bill->payments_sum_amount ?? 0);
             return [
                 'id'          => $bill->id,
                 'label'       => ($bill->project?->name ?? 'Project') . " · RA-{$bill->bill_no}",

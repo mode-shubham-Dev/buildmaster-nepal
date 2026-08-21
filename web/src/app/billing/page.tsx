@@ -40,7 +40,7 @@ function BillingContent() {
   const [detailId, setDetailId] = useState<number | null>(null);
 
   const { data: projects } = useQuery({ queryKey: ["projects"], queryFn: () => fetchProjects() });
-  const { data: bills, isLoading } = useQuery({
+  const { data: bills, isLoading, isError } = useQuery({
     queryKey: ["ra-bills", projectId],
     queryFn: () => fetchRaBills(projectId ? { project_id: Number(projectId) } : {}),
   });
@@ -88,6 +88,10 @@ function BillingContent() {
       <main className="mx-auto max-w-4xl px-6 py-8">
         {isLoading ? (
           <div className="flex items-center justify-center py-24"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load bills. Please refresh and try again.
+          </div>
         ) : bills?.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-300"><FileText className="h-7 w-7" /></div>
@@ -161,7 +165,7 @@ function BillDetail({ billId, onClose, onChanged }: { billId: number; onClose: (
   const canApprove = can("billing.approve");
   const [showPay, setShowPay] = useState(false);
 
-  const { data: bill, isLoading } = useQuery({ queryKey: ["ra-bill", billId], queryFn: () => fetchRaBill(billId) });
+  const { data: bill, isLoading, isError } = useQuery({ queryKey: ["ra-bill", billId], queryFn: () => fetchRaBill(billId) });
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["ra-bill", billId] });
@@ -177,7 +181,9 @@ function BillDetail({ billId, onClose, onChanged }: { billId: number; onClose: (
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/20 p-4 backdrop-blur-sm">
       <div className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
-        {isLoading || !bill ? (
+        {isError ? (
+          <div className="flex items-center justify-center py-20 text-sm text-red-600">Failed to load bill. Please close and try again.</div>
+        ) : isLoading || !bill ? (
           <div className="flex items-center justify-center py-20"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>
         ) : (
           <>

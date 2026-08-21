@@ -5,7 +5,7 @@ export interface ManagedUser {
   name: string;
   email: string;
   roles: string[];
-  permissions: string[];
+  permissions: string[];  // always [] in list; full set only on /me
   created_at: string;
 }
 

@@ -27,6 +27,9 @@ class PettyCashFund extends Model
     /** DERIVED: total APPROVED expenses drawn from the fund. */
     public function getTotalSpentAttribute(): float
     {
+        if ($this->relationLoaded('expenses')) {
+            return (float) $this->expenses->where('status', 'approved')->sum('amount');
+        }
         return (float) $this->expenses()->where('status', 'approved')->sum('amount');
     }
 

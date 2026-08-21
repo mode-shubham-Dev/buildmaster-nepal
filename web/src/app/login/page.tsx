@@ -18,6 +18,7 @@ interface ApiError {
   response?: {
     data?: {
       message?: string;
+      errors?: Record<string, string[]>;
     };
   };
 }
@@ -41,8 +42,11 @@ export default function LoginPage() {
       await login(email, password);
     } catch (err) {
       const apiError = err as ApiError;
+      const errs = apiError.response?.data?.errors;
       const message =
-        apiError.response?.data?.message ||
+        errs?.email?.[0] ??
+        errs?.password?.[0] ??
+        apiError.response?.data?.message ??
         "Unable to sign in. Please check your credentials and try again.";
       setError(message);
       setLoading(false);

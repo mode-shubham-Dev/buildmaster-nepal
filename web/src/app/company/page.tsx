@@ -118,7 +118,7 @@ function CompanySettingsContent() {
 /* ---------------- COMPANY TAB ---------------- */
 function CompanyTab({ canManage }: { canManage: boolean }) {
   const queryClient = useQueryClient();
-  const { data: company, isLoading } = useQuery({
+  const { data: company, isLoading, isError } = useQuery({
     queryKey: ["company"],
     queryFn: fetchCompany,
   });
@@ -136,6 +136,7 @@ function CompanyTab({ canManage }: { canManage: boolean }) {
   });
 
   if (isLoading) return <Spinner />;
+  if (isError) return <div className="flex min-h-screen items-center justify-center text-sm text-red-600">Failed to load company info. Please refresh and try again.</div>;
 
   const value = (key: keyof Company) =>
     (form[key] ?? company?.[key] ?? "") as string;

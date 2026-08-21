@@ -43,7 +43,7 @@ class DocumentController extends Controller
             'description'          => ['nullable', 'string'],
             'document_date'        => ['nullable', 'date'],
             'expiry_date'          => ['nullable', 'date'],
-            'file'                 => ['required', 'file', 'max:20480'], // 20MB
+            'file'                 => ['required', 'file', 'max:20480', 'mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif'],
         ]);
 
         $document = Document::create([

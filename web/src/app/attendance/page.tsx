@@ -42,7 +42,7 @@ function AttendanceContent() {
     setPendingEdits({});
   }
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["roster", date],
     queryFn: () => fetchRoster(date),
   });
@@ -150,6 +150,10 @@ function AttendanceContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-24">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load roster. Please refresh and try again.
           </div>
         ) : totalCount === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">

@@ -77,7 +77,7 @@ class ExpenseController extends Controller
 
     public function uploadReceipt(Request $request, Expense $expense): JsonResponse
     {
-        $request->validate(['file' => ['required', 'file', 'max:10240']]);
+        $request->validate(['file' => ['required', 'file', 'max:10240', 'mimes:jpeg,jpg,png,gif,webp,pdf']]);
         $attachment = $this->fileService->attach($expense, $request->file('file'), 'receipts');
         return response()->json(['message' => 'Receipt uploaded.', 'attachment' => $attachment], 201);
     }
@@ -95,7 +95,12 @@ class ExpenseController extends Controller
 
     public function funds(): JsonResponse
     {
-        $funds = PettyCashFund::with(['project:id,name', 'custodian:id,first_name,last_name'])
+        $funds = PettyCashFund::with([
+            'project:id,name',
+            'custodian:id,first_name,last_name',
+            'topups',
+            'expenses' => fn ($q) => $q->where('status', 'approved'),
+        ])
             ->where('is_active', true)
             ->get();
 

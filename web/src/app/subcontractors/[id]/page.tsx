@@ -50,7 +50,7 @@ function ProfileContent() {
   const canPay = can("subcontractors.pay");
   const [showAssign, setShowAssign] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["subcontractor-profile", id],
     queryFn: () => fetchSubcontractorProfile(id),
   });
@@ -59,6 +59,13 @@ function ProfileContent() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]">
         <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" />
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fafaf9] text-sm text-red-600">
+        Failed to load subcontractor. Please refresh and try again.
       </div>
     );
   }

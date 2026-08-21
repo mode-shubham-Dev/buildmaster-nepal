@@ -28,7 +28,7 @@ function UsersContent() {
   const { user: currentUser, can } = useAuth();
   const [showCreate, setShowCreate] = useState(false);
 
-  const { data: users, isLoading } = useQuery({
+  const { data: users, isLoading, isError } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,
   });
@@ -91,6 +91,10 @@ function UsersContent() {
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-7 w-7 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
+          </div>
+        ) : isError ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+            Failed to load users. Please refresh and try again.
           </div>
         ) : (
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">

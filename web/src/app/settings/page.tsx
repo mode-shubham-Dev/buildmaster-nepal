@@ -41,7 +41,7 @@ function SettingsContent() {
   const [overrides, setOverrides] = useState<Partial<Settings>>({});
   const [saved, setSaved] = useState(false);
 
-  const { data: settings, isLoading } = useQuery({ queryKey: ["settings"], queryFn: fetchSettings });
+  const { data: settings, isLoading, isError } = useQuery({ queryKey: ["settings"], queryFn: fetchSettings });
   const form = { ...(settings ?? {}), ...overrides };
 
   const mutation = useMutation({
@@ -58,6 +58,10 @@ function SettingsContent() {
 
   if (isLoading) {
     return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>;
+  }
+
+  if (isError) {
+    return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9] text-sm text-red-600">Failed to load settings. Please refresh and try again.</div>;
   }
 
   return (

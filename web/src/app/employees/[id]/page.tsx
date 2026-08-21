@@ -51,7 +51,7 @@ function ProfileContent() {
   const { can } = useAuth();
   const canManage = can("employees.update");
 
-  const { data: employee, isLoading } = useQuery({
+  const { data: employee, isLoading, isError } = useQuery({
     queryKey: ["employee", id],
     queryFn: () => fetchEmployee(id),
   });
@@ -60,6 +60,14 @@ function ProfileContent() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#f6f7f9]">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-amber-500" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#f6f7f9] text-sm text-red-600">
+        Failed to load employee. Please refresh and try again.
       </div>
     );
   }

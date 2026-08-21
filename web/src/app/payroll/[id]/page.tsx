@@ -20,7 +20,7 @@ function money(v: string | number | null | undefined): string {
   return Number(v).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function ProfileContent() {
+function PayrollRunContent() {
   const params = useParams();
   const id = Number(params.id);
   const queryClient = useQueryClient();
@@ -30,7 +30,7 @@ function ProfileContent() {
   const [expanded, setExpanded] = useState<number | null>(null);
   const [showFinalize, setShowFinalize] = useState(false);
 
-  const { data: run, isLoading } = useQuery({
+  const { data: run, isLoading, isError } = useQuery({
     queryKey: ["payroll-run", id],
     queryFn: () => fetchPayrollRun(id),
   });
@@ -45,6 +45,10 @@ function ProfileContent() {
 
   if (isLoading) {
     return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>;
+  }
+
+  if (isError) {
+    return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9] text-sm text-red-600">Failed to load payroll run. Please refresh and try again.</div>;
   }
   if (!run) {
     return <div className="flex min-h-screen items-center justify-center bg-[#fafaf9]"><p className="text-sm text-slate-400">Run not found.</p></div>;
@@ -358,7 +362,7 @@ function FinalizeModal({ title, total, count, pending, onConfirm, onClose }: { t
 export default function PayrollRunPage() {
   return (
     <PermissionGuard permission="payroll.view">
-      <ProfileContent />
+      <PayrollRunContent />
     </PermissionGuard>
   );
 }

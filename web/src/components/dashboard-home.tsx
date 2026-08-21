@@ -26,7 +26,7 @@ const ACTION_ICON: Record<string, React.ReactNode> = {
 
 export function DashboardHome() {
   const router = useRouter();
-  const { data, isLoading } = useQuery({ queryKey: ["dashboard-summary"], queryFn: fetchDashboardSummary });
+  const { data, isLoading, isError } = useQuery({ queryKey: ["dashboard-summary"], queryFn: fetchDashboardSummary });
 
   if (isLoading) {
     return (
@@ -34,6 +34,14 @@ export function DashboardHome() {
         {[...Array(4)].map((_, i) => (
           <div key={i} className="h-[88px] animate-pulse rounded-lg border border-slate-200 bg-white" />
         ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="mt-8 rounded-lg border border-red-200 bg-red-50 px-5 py-6 text-center text-sm text-red-600">
+        Failed to load dashboard summary. Please refresh and try again.
       </div>
     );
   }

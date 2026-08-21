@@ -82,7 +82,7 @@ function ExpensesTab({ can }: { can: (p: string) => boolean }) {
   const [filter, setFilter] = useState("");
   const [showForm, setShowForm] = useState(false);
 
-  const { data: expenses, isLoading } = useQuery({
+  const { data: expenses, isLoading, isError } = useQuery({
     queryKey: ["expenses", filter],
     queryFn: () => fetchExpenses({ status: filter || undefined }),
   });
@@ -118,6 +118,10 @@ function ExpensesTab({ can }: { can: (p: string) => boolean }) {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-24"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>
+      ) : isError ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+          Failed to load expenses. Please refresh and try again.
+        </div>
       ) : expenses?.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-300"><Receipt className="h-7 w-7" /></div>
@@ -299,7 +303,7 @@ function FundsTab({ can }: { can: (p: string) => boolean }) {
   const [showCreate, setShowCreate] = useState(false);
   const [topupFundId, setTopupFundId] = useState<number | null>(null);
 
-  const { data: funds, isLoading } = useQuery({ queryKey: ["funds"], queryFn: fetchFunds });
+  const { data: funds, isLoading, isError } = useQuery({ queryKey: ["funds"], queryFn: fetchFunds });
 
   return (
     <div>
@@ -313,6 +317,10 @@ function FundsTab({ can }: { can: (p: string) => boolean }) {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-24"><div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-slate-500" /></div>
+      ) : isError ? (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center text-sm text-red-600">
+          Failed to load petty cash funds. Please refresh and try again.
+        </div>
       ) : funds?.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-300"><Coins className="h-7 w-7" /></div>
